@@ -1,15 +1,27 @@
 import { createApp } from 'vue';
+import type { Component } from 'vue';
+import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from '@/router'
-import { registerApps, setupErrorHandler } from './micro'
-import './styles/index.scss';
+import { registerApps, setupErrorHandler } from '@/micro'
+import ElementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
+import * as ElementPlusIconsVue from '@element-plus/icons-vue';
+import '@/styles/index.scss';
 
 // 创建Vue应用
 const app = createApp(App)
 
-// 注册Vue Router
-app.use(router)
+// 创建Pinia实例
+const pinia = createPinia()
 
+// 注册Element Plus图标
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component as Component);
+}
+
+// 注册Vue Router 、 pinia
+app.use(router).use(pinia).use(ElementPlus)
 // 挂载主应用
 app.mount('#app')
 

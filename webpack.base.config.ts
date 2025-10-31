@@ -4,7 +4,7 @@ import type { Configuration } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { VueLoaderPlugin } from 'vue-loader';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-
+import {CleanWebpackPlugin} from 'clean-webpack-plugin';
 // 在 ES 模块中获取 __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -68,7 +68,10 @@ const config: Configuration = {
       title: 'Qiankun Main App',
       inject: 'body'
     }),
-    new ForkTsCheckerWebpackPlugin()
+    new ForkTsCheckerWebpackPlugin(),
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: ['**/*', '!.gitkeep'] // 清理所有文件，保留 .gitkeep 文件
+    }),
   ]
 };
 
