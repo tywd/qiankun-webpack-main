@@ -1,6 +1,5 @@
 <template>
   <div class="sub-app-container">
-    <h1>子应用加载区</h1>
      <!-- 加载状态 -->
     <div v-if="loading" class="loading-container">
       <span>正在加载微应用...</span>
@@ -73,6 +72,9 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.sub-app-container {
+  width: 100%;
+}
 .micro-app-container {
   width: 100%;
   flex: 1;

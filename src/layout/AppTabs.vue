@@ -1,50 +1,26 @@
 <template>
   <nav class="navigation-tabs">
     <div class="tabs-container">
-      <div v-for="tab in tabsStore.navTabs" :key="tab.id" :class="['nav-tab', { active: tab.isActive }]"
+      <div v-for="tab in appTabsStore.navTabs" :key="tab.id" :class="['nav-tab', { active: tab.isActive }]"
         @click="switchTab(tab)">
         <span class="tab-name">{{ tab.name }}</span>
-        <el-icon v-if="tab.closable" class="tab-close" @click.stop="closeTab(tab.id)">
-          <Close />
-        </el-icon>
       </div>
     </div>
-
-    <!-- 这里可以添加更多标签页操作，如刷新等 -->
-    <!-- <div class="tab-actions">
-      <el-tooltip content="刷新当前页面" placement="bottom">
-        <el-icon class="action-icon" @click="refreshCurrent">
-          <Refresh />
-        </el-icon>
-      </el-tooltip>
-    </div> -->
   </nav>
 </template>
 
 <script setup lang="ts">
-import { useTabsStore } from '../stores/navigationTabs';
+import { useAppTabsStore } from '@/stores/appTabs';
 import { useRouter } from 'vue-router';
-import { Close, Refresh } from '@element-plus/icons-vue';
 
-const tabsStore = useTabsStore();
+const appTabsStore = useAppTabsStore();
 const router = useRouter();
 
 // 切换标签页
 const switchTab = (tab: any) => {
-  tabsStore.setActiveTab(tab.id);
+  appTabsStore.setActiveTab(tab.id);
+  // TODO 需要添加判断，若需要跳转的子应用已经激活，并且之前跳转过子应用下的某个路径，比如 /sub-app/user，则需要直接跳转过去 /sub-app/user
   router.push(tab.path);
-};
-
-// 关闭标签页（仅对可关闭的标签页有效）
-const closeTab = (tabId: string) => {
-  tabsStore.removeNavTab(tabId);
-};
-
-// 刷新当前页面
-const refreshCurrent = () => {
-  // 这里可以实现页面刷新逻辑
-  // 对于子应用，可能需要重新加载
-  window.location.reload();
 };
 </script>
 

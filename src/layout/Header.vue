@@ -1,51 +1,46 @@
 <template>
     <header class="main-header">
-        <div class="header-content">
-            <!-- 左侧：平台名称 -->
-            <div class="header-left">
-                <div class="platform-name">
-                    <span class="name-text">Qiankun微前端管理平台</span>
-                </div>
+        <!-- 左侧：平台名称 -->
+        <div class="header-left">
+            <div class="platform-name">
+                <span class="name-text">Qiankun微前端管理平台</span>
             </div>
-            <!-- 中间：导航Tabs -->
-            <div class="header-center">
-                <NavigationTabs />
-            </div>
-
-            <!-- 右侧：用户信息 -->
-            <div class="header-right">
-                <el-dropdown @command="handleUserCommand" trigger="click">
-                    <span class="user-info">
-                        <el-avatar :size="32" :src="userStore.userInfo.avatar" class="user-avatar" />
-                        <span class="username">{{ userStore.userInfo.name }}</span>
-                        <el-icon class="dropdown-arrow">
-                            <ArrowDown />
-                        </el-icon>
-                    </span>
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item command="logout">
-                                <el-icon>
-                                    <SwitchButton />
-                                </el-icon>
-                                退出登录
-                            </el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
-            </div>
+        </div>
+        <!-- 中间：导航Tabs -->
+        <div class="header-center">
+            <AppTabs />
+        </div>
+        <!-- 右侧：用户信息 -->
+        <div class="header-right">
+            <el-dropdown @command="handleUserCommand" trigger="click">
+                <span class="user-info">
+                    <el-avatar :size="32" :src="userStore.userInfo.avatar" class="user-avatar" />
+                    <span class="username">{{ userStore.userInfo.name }}</span>
+                    <el-icon class="dropdown-arrow">
+                        <ArrowDown />
+                    </el-icon>
+                </span>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item command="logout">
+                            <el-icon>
+                                <SwitchButton />
+                            </el-icon>
+                            退出登录
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
         </div>
     </header>
 </template>
 
 <script setup lang="ts">
 import { useUserStore } from '../stores/user';
-import { useRouter } from 'vue-router';
-import { User, SwitchButton, ArrowDown } from '@element-plus/icons-vue';
-import NavigationTabs from './NavigationTabs.vue';
+import { SwitchButton, ArrowDown } from '@element-plus/icons-vue';
+import AppTabs from './AppTabs.vue';
 
 const userStore = useUserStore();
-const router = useRouter();
 
 const handleUserCommand = (command: string) => {
     switch (command) {
@@ -65,73 +60,70 @@ const handleUserCommand = (command: string) => {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    color: white;
 
-    .header-content {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 24px;
-        color: white;
 
-        .header-left {
-            flex-shrink: 0;
+    .header-left {
+        flex-shrink: 0;
 
-            .platform-name {
-                .name-text {
-                    font-size: 20px;
-                    font-weight: 600;
-                    letter-spacing: 1px;
-                }
+        .platform-name {
+            .name-text {
+                font-size: 20px;
+                font-weight: 600;
+                letter-spacing: 1px;
             }
         }
+    }
 
-        .header-center {
-            flex-grow: 1;
-            /* 中间内容自适应 */
-            overflow-y: auto;
-            /* 超出部分显示垂直滚动条 */
-        }
+    .header-center {
+        flex-grow: 1;
+        /* 中间内容自适应 */
+        overflow-y: auto;
+        /* 超出部分显示垂直滚动条 */
+    }
 
-        .header-right {
-            flex-shrink: 0;
+    .header-right {
+        flex-shrink: 0;
 
-            .user-info {
+        .user-info {
+            color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 8px 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+            }
+
+            .user-avatar {
+                margin-right: 8px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+            }
+
+            .username {
                 color: #fff;
-                display: flex;
-                align-items: center;
-                padding: 8px 5px;
-                border-radius: 6px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-
-                &:hover {
-                    background-color: rgba(255, 255, 255, 0.1);
-                }
-
-                .user-avatar {
-                    margin-right: 8px;
-                    border: 2px solid rgba(255, 255, 255, 0.3);
-                }
-
-                .username {
-                    color: #fff;
-                    font-size: 14px;
-                    font-weight: 500;
-                }
-
-                .dropdown-arrow {
-                    font-size: 12px;
-                    transition: transform 0.3s ease;
-                }
+                font-size: 14px;
+                font-weight: 500;
             }
 
-            // 下拉菜单展开时箭头旋转
-            :deep(.el-dropdown) {
-                &.is-active {
-                    .dropdown-arrow {
-                        transform: rotate(180deg);
-                    }
+            .dropdown-arrow {
+                font-size: 12px;
+                transition: transform 0.3s ease;
+            }
+        }
+
+        // 下拉菜单展开时箭头旋转
+        :deep(.el-dropdown) {
+            &.is-active {
+                .dropdown-arrow {
+                    transform: rotate(180deg);
                 }
             }
         }

@@ -3,9 +3,12 @@ export interface NavTab {
   id: string;
   name: string;
   path: string;
-  component: string;
-  closable: boolean; // 是否可关闭
+  component?: string;
+  closable?: boolean; // 是否可关闭
   isActive: boolean;
+}
+export interface AppNavTab extends NavTab{
+  app: string;
 }
 
 // 用户信息类型
