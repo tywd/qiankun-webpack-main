@@ -4,7 +4,15 @@ import router from "@/router";
 export const useTabsStore = defineStore('Tabs', {
   state: () => ({
     // 导航Tabs数据
-    tabs: [] as NavTab[],
+    tabs: [
+      {
+        id: 'home',
+        name: '数据看板',
+        path: '/dashboard',
+        closable: false,
+        isActive: true
+      }
+    ] as NavTab[],
     activeTabId: 'dashboard' as string
   }),
 

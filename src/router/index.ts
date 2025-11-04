@@ -70,6 +70,7 @@ router.beforeEach((to, from, next) => {
   if (mainRoutes.some(route => to.path.startsWith(route))) { // 激活主应用
     const activeApp: AppNavTab | undefined = appTabsStore.navTabs.find(tab => tab.app === 'main');
     appTabsStore.setActiveTab(activeApp?.id || '');
+
     const tabsStore = useTabsStore();
     const menuStore = useMenuStore();
     menuStore.mergeMenu(getAllRoute());
@@ -88,6 +89,7 @@ router.beforeEach((to, from, next) => {
         });
       }
     }
+    
   } else { // 激活子应用
     appTabsStore.navTabs.forEach(tab => {
       if (to.path.startsWith(tab.path)) {
@@ -97,6 +99,10 @@ router.beforeEach((to, from, next) => {
     });
   }
   next()
+})
+
+router.afterEach((to) => {
+  console.log('主应用路由切换完成:', to.path)
 })
 
 export default router

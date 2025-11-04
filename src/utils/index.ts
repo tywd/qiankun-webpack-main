@@ -136,6 +136,5 @@ export const transformMenu = (routes: any[]): any[] => {
         }
         return transformd
     })
-    console.log('menu', menu)
     return menu;
 }

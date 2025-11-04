@@ -41,7 +41,7 @@ export const useMenuStore = defineStore('menu', {
     collapsed: false, // 侧边栏是否折叠
     activeMenu: 'dashboard', // 当前激活的菜单
     openMenus: ['dashboard'] as string[], // 展开的菜单项
-    isLoaded: false
+    isLoaded: false // 是否加载完成所有菜单
   }),
 
   getters: {
@@ -141,7 +141,7 @@ export const useMenuStore = defineStore('menu', {
     getBreadcrumb(path: string) {
       return this.breadcrumb(path);
     },
-    
+    // 合并菜单
     mergeMenu(routes: any[]) {
       if (this.isLoaded) return; // 菜单已经加载则无需再合并menus
       this.menus = [...this.menus, ...transformMenu(routes)]
