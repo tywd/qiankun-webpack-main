@@ -40,7 +40,8 @@ export const useMenuStore = defineStore('menu', {
     ] as MenuItem[],
     collapsed: false, // 侧边栏是否折叠
     activeMenu: 'dashboard', // 当前激活的菜单
-    openMenus: ['dashboard'] as string[] // 展开的菜单项
+    openMenus: ['dashboard'] as string[], // 展开的菜单项
+    isLoaded: false
   }),
 
   getters: {
@@ -142,7 +143,9 @@ export const useMenuStore = defineStore('menu', {
     },
     
     mergeMenu(routes: any[]) {
+      if (this.isLoaded) return; // 菜单已经加载则无需再合并menus
       this.menus = [...this.menus, ...transformMenu(routes)]
+      this.isLoaded = true
     }
   }
 });

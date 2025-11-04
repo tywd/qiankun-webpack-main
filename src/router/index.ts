@@ -50,10 +50,6 @@ const _routes: any[] = getAllRoute()
 const mainRoutes: RouteRecordRaw[] = transformRoutes(_routes);
 const routes: RouteRecordRaw[] = [...baseRoutes, ...mainRoutes, ...subRoutes];
 
-const tabsStore = useTabsStore();
-const menuStore = useMenuStore();
-menuStore.mergeMenu(getAllRoute());
-
 const router = createRouter({
   history: createWebHistory(),
   routes
@@ -74,6 +70,9 @@ router.beforeEach((to, from, next) => {
   if (mainRoutes.some(route => to.path.startsWith(route))) { // 激活主应用
     const activeApp: AppNavTab | undefined = appTabsStore.navTabs.find(tab => tab.app === 'main');
     appTabsStore.setActiveTab(activeApp?.id || '');
+    const tabsStore = useTabsStore();
+    const menuStore = useMenuStore();
+    menuStore.mergeMenu(getAllRoute());
     if (to.meta?.title) {
       document.title = to.meta.title as string
       // 主应用设置激活左侧sidebar的菜单
