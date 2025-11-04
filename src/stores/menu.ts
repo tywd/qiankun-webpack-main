@@ -1,6 +1,7 @@
 // 菜单状态管理
 import { defineStore } from 'pinia';
 import { MenuItem } from '../types';
+import { transformMenu } from '@/utils';
 
 export const useMenuStore = defineStore('menu', {
   state: () => ({
@@ -8,68 +9,28 @@ export const useMenuStore = defineStore('menu', {
     menus: [
       {
         id: 'dashboard',
-        name: '数据看板',
+        title: '数据看板',
         path: '/dashboard',
         icon: 'DataAnalysis',
         level: 1
       },
       {
         id: 'user-center',
-        name: '个人中心',
+        title: '个人中心',
         path: '/user-center',
         icon: 'User',
         level: 1,
       },
-      // {
-      //   id: 'user-management',
-      //   name: '用户管理',
-      //   icon: 'User',
-      //   level: 1,
-      //   children: [
-      //     {
-      //       id: 'user-list',
-      //       name: '用户列表',
-      //       path: '/user/list',
-      //       icon: 'List',
-      //       level: 2,
-      //       parentId: 'user-management'
-      //     },
-      //     {
-      //       id: 'user-roles',
-      //       name: '角色管理',
-      //       path: '/user/roles',
-      //       icon: 'Setting',
-      //       level: 2,
-      //       parentId: 'user-management'
-      //     }
-      //   ]
-      // },
       {
         id: 'system-management',
-        name: '系统管理',
+        title: '系统管理',
         icon: 'Setting',
         level: 1,
         children: [
           {
-            id: 'sub-management',
-            name: '子应用管理',
-            path: '/system/sub-management',
-            icon: 'Grid',
-            level: 2,
-            parentId: 'system-management'
-          },
-          {
-            id: 'sub-apply',
-            name: '子应用申请',
-            path: '/system/sub-apply',
-            icon: 'CirclePlus',
-            level: 2,
-            parentId: 'system-management'
-          },
-          {
             id: 'system-settings',
-            name: '系统设置',
-            path: '/system/settings',
+            title: '系统设置',
+            path: '/system/setting',
             icon: 'Tools',
             level: 2,
             parentId: 'system-management'
@@ -103,24 +64,24 @@ export const useMenuStore = defineStore('menu', {
     // 获取面包屑路径
     breadcrumb: (state) => (path: string) => {
       const breadcrumb: Array<{ title: string; path?: string; icon?: string }> = [];
-      
+
       const findPath = (menus: MenuItem[], targetPath: string): boolean => {
         for (const menu of menus) {
           if (menu.path === targetPath) {
-            breadcrumb.unshift({ 
-              title: menu.name, 
+            breadcrumb.unshift({
+              title: menu.title,
               path: menu.path,
-              icon: menu.icon 
+              icon: menu.icon
             });
             return true;
           }
           if (menu.children) {
             if (findPath(menu.children, targetPath)) {
-              if (menu.name) {
-                breadcrumb.unshift({ 
-                  title: menu.name, 
+              if (menu.title) {
+                breadcrumb.unshift({
+                  title: menu.title,
                   path: menu.path,
-                  icon: menu.icon 
+                  icon: menu.icon
                 });
               }
               return true;
@@ -174,10 +135,14 @@ export const useMenuStore = defineStore('menu', {
       };
       return findInMenus(this.menus);
     },
-    
+
     // 获取面包屑路径
     getBreadcrumb(path: string) {
       return this.breadcrumb(path);
+    },
+    
+    mergeMenu(routes: any[]) {
+      this.menus = [...this.menus, ...transformMenu(routes)]
     }
   }
 });

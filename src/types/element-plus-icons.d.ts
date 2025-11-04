@@ -64,6 +64,7 @@ declare module '@element-plus/icons-vue' {
   export const SwitchButton: DefineComponent<{}, {}, any>
   export const Picture: DefineComponent<{}, {}, any>
   export const ShoppingCart: DefineComponent<{}, {}, any>
+  export const Plus: DefineComponent<{}, {}, any>
   // 默认导出
   const ElementPlusIconsVue: {
     [key: string]: DefineComponent<{}, {}, any>

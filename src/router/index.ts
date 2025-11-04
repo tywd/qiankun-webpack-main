@@ -3,63 +3,56 @@ import type { RouteRecordRaw } from 'vue-router'
 import { useAppTabsStore } from '@/stores/appTabs';
 import { useTabsStore } from '../stores/tabs';
 import { useMenuStore } from '../stores/menu';
-import { getAllApp } from '@/utils';
+import { getAllApp, getAllRoute, transformRoutes } from '@/utils';
 import { AppNavTab } from '@/types';
-
 // 子应用会挂载到这个路由下
 const subRoutes: RouteRecordRaw[] = [
   {
     path: '/sub-app/:path(.*)*', // Vue Router 4// 匹配 /sub-app 下的所有路径，需要写成 ‘:path(.*)*’ 才能匹配（包括空路径、单层、多层）
-    name: 'SubApp',
+    name: 'subApp',
     component: () => import('@/components/SubApp.vue'),
     meta: { title: '子应用' }
   }
 ];
 
-const mainRoutes: RouteRecordRaw[] = [
+const baseRoutes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: '/dashboard'
   },
   {
     path: '/dashboard',
-    name: 'Dashboard',
-    component: () => import('@/views/Dashboard.vue'),
+    name: 'dashboard',
+    component: () => import('@/views/dashboard.vue'),
     meta: { title: '数据看板' }
   },
   {
     path: '/user-center',
-    name: 'UserCenter',
-    component: () => import('@/views/UserCenter.vue'),
-    meta: { title: '用户中心' }
+    name: 'userCenter',
+    component: () => import('@/views/user-center.vue'),
+    meta: { title: '个人中心' }
   },
   {
     path: '/system',
-    name: 'System',
+    name: 'system',
     children: [
       {
-        path: '/system/sub-management',
-        name: 'SubManagement',
-        component: () => import('@/views/system/SubManagement.vue'),
-        meta: { title: '子应用管理' }
-      },
-      {
-        path: '/system/sub-apply',
-        name: 'SubApply',
-        component: () => import('@/views/system/SubApply.vue'),
-        meta: { title: '子应用申请' }
-      },
-      {
-        path: '/system/settings',
-        name: 'Settings',
-        component: () => import('@/views/system/Settings.vue'),
+        path: '/system/setting',
+        name: 'setting',
+        component: () => import('@/views/system/setting.vue'),
         meta: { title: '系统设置' }
       }
     ]
   }
-];
+]
 
-const routes: RouteRecordRaw[] = [...mainRoutes, ...subRoutes];
+const _routes: any[] = getAllRoute()
+const mainRoutes: RouteRecordRaw[] = transformRoutes(_routes);
+const routes: RouteRecordRaw[] = [...baseRoutes, ...mainRoutes, ...subRoutes];
+
+const tabsStore = useTabsStore();
+const menuStore = useMenuStore();
+menuStore.mergeMenu(getAllRoute());
 
 const router = createRouter({
   history: createWebHistory(),
@@ -77,13 +70,10 @@ router.beforeEach((to, from, next) => {
       appTabsStore.addNavTab(app);
     });
   }
-  const mainRoutes: string[] = ['/dashboard', '/system', '/user-center'] // 主应用的路由
+  const mainRoutes: string[] = ['/dashboard', '/system', '/user-center', '/user', '/child'] // 主应用的路由
   if (mainRoutes.some(route => to.path.startsWith(route))) { // 激活主应用
     const activeApp: AppNavTab | undefined = appTabsStore.navTabs.find(tab => tab.app === 'main');
     appTabsStore.setActiveTab(activeApp?.id || '');
-
-    const tabsStore = useTabsStore();
-    const menuStore = useMenuStore();
     if (to.meta?.title) {
       document.title = to.meta.title as string
       // 主应用设置激活左侧sidebar的菜单

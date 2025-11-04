@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { reactive, onMounted } from 'vue';
 import { useUserStore } from '../stores/user';
 import { ElMessage } from 'element-plus';
 import { Plus } from '@element-plus/icons-vue';
