@@ -17,6 +17,9 @@
     "experimentalSpecifierResolution": "node"
   },
   "packageManager": "pnpm@10.12.4",
+  "engines": {
+    "node": ">=23.11.1"
+  },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
     "element-plus": "^2.11.5",
