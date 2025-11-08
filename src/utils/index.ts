@@ -100,7 +100,8 @@ export const getMainRoute = () => {
     return routes
 }
 
-// 获取子应用列表
+// TODO
+// 获取子应用列表(如果加了新的子应用，需要在主应用此处注册好新的子应用信息)
 export const getSubApp = () => {
     return [
         {
