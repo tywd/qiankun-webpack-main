@@ -121,9 +121,9 @@ export const getSubApp = () => {
             name: '脚手架子应用', // 子应用名称
             entry: 'http://localhost:8082', // 子应用入口
             container: '#micro-app-container', // 挂载容器
-            activeRule: '/test-vue3-qiankun', // 激活路由
+            activeRule: '/tyteam-ai', // 激活路由
             props: {
-                routerBase: '/test-vue3-qiankun',
+                routerBase: '/tyteam-ai',
                 // setGlobalState,
                 mainAppInfo: {
                     name: '主应用的全局参数传给脚手架子应用'
@@ -133,7 +133,8 @@ export const getSubApp = () => {
     ]
 };
 
-// 获取子应用路由
+// TODO
+// 获取子应用路由(如果加了新的子应用，需要在主应用此处注册好新的子应用路由信息)
 export const getSubRoute = () =>
     [
         {
@@ -143,8 +144,8 @@ export const getSubRoute = () =>
             meta: { title: '子应用' }
         },
         {
-            path: '/test-vue3-qiankun/:path(.*)*', // Vue Router 4// 匹配 /sub-app 下的所有路径，需要写成 ‘:path(.*)*’ 才能匹配（包括空路径、单层、多层）
-            name: 'testVue3Qiankun',
+            path: '/tyteam-ai/:path(.*)*', // Vue Router 4// 匹配 /sub-app 下的所有路径，需要写成 ‘:path(.*)*’ 才能匹配（包括空路径、单层、多层）
+            name: 'aiLlmVue',
             component: () => import('@/components/SubApp.vue'),
             meta: { title: '子应用2' }
         }
