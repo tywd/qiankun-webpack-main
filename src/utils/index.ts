@@ -3,28 +3,24 @@ import { nanoid } from 'nanoid';
 
 // 获取主应用与所有子应用的 appTab
 export const getAllApp = () => {
-    const arr: AppNavTab[] = [
+    const subAppList: any[] = getSubApp();
+    const subArr: AppNavTab[] = subAppList.map((app: any) => (
+        {
+            id: nanoid(),
+            app: app.name,
+            name: app.name,
+            path: app.activeRule,
+            isActive: false
+        }
+    ));
+    const allAppTab: AppNavTab[] = [
         {
             id: nanoid(),
             app: 'main',
             name: '首页',
             path: '/dashboard',
             isActive: true
-        },
-        {
-            id: nanoid(),
-            app: 'subApp',
-            name: '子应用',
-            path: '/sub-app',
-            isActive: false
-        },
-        {
-            id: nanoid(),
-            app: 'subApp2',
-            name: '子应用2',
-            path: '/sub-app2',
-            isActive: false
-        }
+        }, ...subArr
     ];
     // const modules = import.meta.glob('../routes/*.ts');
     // Object.keys(modules).forEach(key => {
@@ -32,10 +28,11 @@ export const getAllApp = () => {
     //     const routes = module.default;
     //     allRoutes.push(...routes);
     // });
-    return arr;
+    return allAppTab;
 };
 
-export const getAllRoute = () => {
+// 获取主应用路由
+export const getMainRoute = () => {
     const routes = [
         {
             id: nanoid(),
@@ -103,6 +100,55 @@ export const getAllRoute = () => {
     return routes
 }
 
+// 获取子应用列表
+export const getSubApp = () => {
+    return [
+        {
+            name: '子应用', // 子应用名称
+            entry: 'http://localhost:8081', // 子应用入口
+            container: '#micro-app-container', // 挂载容器
+            activeRule: '/sub-app', // 激活路由
+            props: {
+                routerBase: '/sub-app',
+                // setGlobalState,
+                mainAppInfo: {
+                    name: '主应用的全局参数传给子应用'
+                }
+            }
+        },
+        {
+            name: '脚手架子应用', // 子应用名称
+            entry: 'http://localhost:8082', // 子应用入口
+            container: '#micro-app-container', // 挂载容器
+            activeRule: '/test-vue3-qiankun', // 激活路由
+            props: {
+                routerBase: '/test-vue3-qiankun',
+                // setGlobalState,
+                mainAppInfo: {
+                    name: '主应用的全局参数传给脚手架子应用'
+                }
+            }
+        }
+    ]
+};
+
+// 获取子应用路由
+export const getSubRoute = () =>
+    [
+        {
+            path: '/sub-app/:path(.*)*', // Vue Router 4// 匹配 /sub-app 下的所有路径，需要写成 ‘:path(.*)*’ 才能匹配（包括空路径、单层、多层）
+            name: 'subApp',
+            component: () => import('@/components/SubApp.vue'),
+            meta: { title: '子应用' }
+        },
+        {
+            path: '/test-vue3-qiankun/:path(.*)*', // Vue Router 4// 匹配 /sub-app 下的所有路径，需要写成 ‘:path(.*)*’ 才能匹配（包括空路径、单层、多层）
+            name: 'testVue3Qiankun',
+            component: () => import('@/components/SubApp.vue'),
+            meta: { title: '子应用2' }
+        }
+    ]
+
 // 处理原始route路径为 vue-router可用的格式
 export const transformRoutes = (routes: any[]): any[] => {
     const newRoutes: any[] = routes.map(route => {
@@ -121,6 +167,7 @@ export const transformRoutes = (routes: any[]): any[] => {
     return newRoutes;
 }
 
+// 处理原始route路径为菜单可用的格式
 export const transformMenu = (routes: any[]): any[] => {
     const menu: any[] = routes.map(route => {
         const transformd: any = {

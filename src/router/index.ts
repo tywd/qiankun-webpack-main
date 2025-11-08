@@ -3,18 +3,10 @@ import type { RouteRecordRaw } from 'vue-router'
 import { useAppTabsStore } from '@/stores/appTabs';
 import { useTabsStore } from '../stores/tabs';
 import { useMenuStore } from '../stores/menu';
-import { getAllApp, getAllRoute, transformRoutes } from '@/utils';
+import { getAllApp, getMainRoute, getSubRoute, transformRoutes } from '@/utils';
 import { AppNavTab } from '@/types';
-// 子应用会挂载到这个路由下
-const subRoutes: RouteRecordRaw[] = [
-  {
-    path: '/sub-app/:path(.*)*', // Vue Router 4// 匹配 /sub-app 下的所有路径，需要写成 ‘:path(.*)*’ 才能匹配（包括空路径、单层、多层）
-    name: 'subApp',
-    component: () => import('@/components/SubApp.vue'),
-    meta: { title: '子应用' }
-  }
-];
 
+// 主应用基础路由（默认不可动，本地写死）
 const baseRoutes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -46,8 +38,13 @@ const baseRoutes: RouteRecordRaw[] = [
   }
 ]
 
-const _routes: any[] = getAllRoute()
+// 子应用路由，子应用会挂载到这个路由下
+const subRoutes: RouteRecordRaw[] = getSubRoute();
+
+// 主应用其他可变动路由
+const _routes: any[] = getMainRoute()
 const mainRoutes: RouteRecordRaw[] = transformRoutes(_routes);
+
 const routes: RouteRecordRaw[] = [...baseRoutes, ...mainRoutes, ...subRoutes];
 
 const router = createRouter({
@@ -73,7 +70,7 @@ router.beforeEach((to, from, next) => {
 
     const tabsStore = useTabsStore();
     const menuStore = useMenuStore();
-    menuStore.mergeMenu(getAllRoute());
+    menuStore.mergeMenu(getMainRoute());
     if (to.meta?.title) {
       document.title = to.meta.title as string
       // 主应用设置激活左侧sidebar的菜单

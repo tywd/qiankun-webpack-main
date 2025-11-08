@@ -1,5 +1,6 @@
 import { registerMicroApps, start, initGlobalState, addGlobalUncaughtErrorHandler } from 'qiankun'
 import type { RegistrableApp } from 'qiankun'
+import { getSubApp } from '@/utils';
 
 // 初始化全局状态
 const initialState = {
@@ -18,21 +19,7 @@ onGlobalStateChange((value, prev) => {
 });
 
 // 注册子应用 - 这里先配置一个示例，后续会实际创建
-const microApps: RegistrableApp<any>[] = [
-  {
-    name: 'sub-app', // 子应用名称
-    entry: 'http://localhost:8081', // 子应用入口
-    container: '#micro-app-container', // 挂载容器
-    activeRule: '/sub-app', // 激活路由
-    props: {
-      routerBase: '/sub-app',
-      // setGlobalState,
-      mainAppInfo: {
-        name: 'Main Application'
-      }
-    }
-  }
-];
+const microApps: RegistrableApp<any>[] = getSubApp();
 
 // 注册微应用
 export function registerApps() {
