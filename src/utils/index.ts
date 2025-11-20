@@ -110,26 +110,25 @@ export const getSubApp = () => {
             container: '#micro-app-container', // 挂载容器
             activeRule: '/sub-app', // 激活路由
             props: {
-                routerBase: '/sub-app',
                 // setGlobalState,
                 mainAppInfo: {
                     name: '主应用的全局参数传给子应用'
                 }
             }
         },
-        {
-            name: '脚手架子应用', // 子应用名称
-            entry: 'http://localhost:8082', // 子应用入口
-            container: '#micro-app-container', // 挂载容器
-            activeRule: '/tyteam-ai', // 激活路由
-            props: {
-                routerBase: '/tyteam-ai',
-                // setGlobalState,
-                mainAppInfo: {
-                    name: '主应用的全局参数传给脚手架子应用'
-                }
-            }
-        }
+        // {
+        //     name: '脚手架子应用', // 子应用名称
+        //     entry: 'http://localhost:8082', // 子应用入口
+        //     container: '#micro-app-container', // 挂载容器
+        //     activeRule: '/tyteam-ai', // 激活路由
+        //     props: {
+        //         routerBase: '/tyteam-ai',
+        //         // setGlobalState,
+        //         mainAppInfo: {
+        //             name: '主应用的全局参数传给脚手架子应用'
+        //         }
+        //     }
+        // }
     ]
 };
 
@@ -142,12 +141,6 @@ export const getSubRoute = () =>
             name: 'subApp',
             component: () => import('@/components/SubApp.vue'),
             meta: { title: '子应用' }
-        },
-        {
-            path: '/tyteam-ai/:path(.*)*', // Vue Router 4// 匹配 /sub-app 下的所有路径，需要写成 ‘:path(.*)*’ 才能匹配（包括空路径、单层、多层）
-            name: 'aiLlmVue',
-            component: () => import('@/components/SubApp.vue'),
-            meta: { title: '子应用2' }
         }
     ]
 
